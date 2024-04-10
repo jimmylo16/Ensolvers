@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { BaseModel } from '../models/base.model';
 import { ApiProperty } from '@nestjs/swagger';
-
-export class BaseEntity implements BaseModel {
+import { BaseEntity as TypeOrmBaseEntity } from 'typeorm';
+export class BaseEntity extends TypeOrmBaseEntity implements BaseModel {
   @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;

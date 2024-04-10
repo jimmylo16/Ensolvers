@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -12,5 +14,33 @@ export class UsersService {
 
   async findOne(id: string) {
     return this.userRepository.find({ where: { id } });
+  }
+
+  async findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  async findAll(pagination: PaginationDto) {
+    const { limit = 10, offset = 0 } = pagination;
+    const users = await this.userRepository.find({
+      where: { deletedAt: null },
+      take: limit,
+      skip: offset,
+    });
+
+    return users;
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    await this.findOne(id);
+
+    const updatedUser = await this.userRepository.update(id, updateUserDto);
+    return updatedUser;
+  }
+
+  async remove(id: string) {
+    const deletedUser = await this.update(id, { deletedAt: new Date() });
+
+    return deletedUser;
   }
 }

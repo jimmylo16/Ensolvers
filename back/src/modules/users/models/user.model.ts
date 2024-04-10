@@ -4,9 +4,7 @@ import { NoteModel } from 'src/modules/notes/models/note.model';
 export class UserModel extends BaseModel {
   readonly id: string;
   readonly fullName: string;
-  readonly age: number;
   readonly email: string;
   readonly password: string;
-  readonly refreshToken?: string;
   readonly notes: NoteModel[];
 }

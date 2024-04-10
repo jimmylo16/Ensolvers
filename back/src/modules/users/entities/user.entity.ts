@@ -8,21 +8,17 @@ import { Note } from 'src/modules/notes/entities/note.entity';
 export class User extends BaseEntity implements UserModel {
   @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
-  readonly id: string;
+  id: string;
 
   @Column('text')
   @ApiProperty()
-  readonly fullName: string;
-
-  @Column('int')
-  @ApiProperty()
-  readonly age: number;
+  fullName: string;
 
   @Column('text', {
     unique: true,
   })
   @ApiProperty()
-  readonly email: string;
+  email: string;
 
   @Column('text', {
     select: false,
@@ -30,10 +26,7 @@ export class User extends BaseEntity implements UserModel {
   @ApiProperty()
   password: string;
 
-  @Column('text', { nullable: true })
-  readonly refreshToken?: string;
-
   @OneToMany(() => Note, (note) => note.user)
   @ApiProperty({ type: () => Note })
-  readonly notes: Note[];
+  notes: Note[];
 }

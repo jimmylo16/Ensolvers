@@ -1,5 +1,5 @@
 import { BaseModel } from 'src/common/models/base.model';
-import { NotesModel } from 'src/modules/notes/models/note.model';
+import { NoteModel } from 'src/modules/notes/models/note.model';
 
 export class UserModel extends BaseModel {
   readonly id: string;
@@ -8,5 +8,5 @@ export class UserModel extends BaseModel {
   readonly email: string;
   readonly password: string;
   readonly refreshToken?: string;
-  readonly notes: NotesModel[];
+  readonly notes: NoteModel[];
 }

@@ -22,6 +22,9 @@ export const dataSourceOptions = {
   migrations: ['dist/db/migrations/*.js'],
   location: 'dist/db/migrations',
   migrationsRun: true,
+  cli: {
+    migrationsDir: __dirname + 'db/migrations',
+  },
 } as DataSourceOptions;
 
 const dataSource = new DataSource(dataSourceOptions);

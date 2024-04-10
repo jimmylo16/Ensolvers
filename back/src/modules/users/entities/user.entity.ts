@@ -2,7 +2,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { UserModel } from '../models/user.model';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Note } from 'src/modules/notes/entities/note.entities';
+import { Note } from 'src/modules/notes/entities/note.entity';
 
 @Entity('users')
 export class User extends BaseEntity implements UserModel {

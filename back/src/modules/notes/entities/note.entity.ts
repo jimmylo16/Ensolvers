@@ -1,11 +1,11 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { NotesModel } from '../models/note.model';
+import { NoteModel } from '../models/note.model';
 import { User } from 'src/modules/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('notes')
-export class Note extends BaseEntity implements NotesModel {
+export class Note extends BaseEntity implements NoteModel {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;

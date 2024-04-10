@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -31,15 +31,29 @@ export class UsersService {
     return users;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto, userId: string) {
+    if (userId != id) {
+      throw new ForbiddenException(
+        'You are not allowed to remove another user',
+      );
+    }
     await this.findOne(id);
 
     const updatedUser = await this.userRepository.update(id, updateUserDto);
     return updatedUser;
   }
 
-  async remove(id: string) {
-    const deletedUser = await this.update(id, { deletedAt: new Date() });
+  async remove(id: string, userId: string) {
+    if (userId != id) {
+      throw new ForbiddenException(
+        'You are not allowed to remove another user',
+      );
+    }
+    const deletedUser = await this.update(
+      id,
+      { deletedAt: new Date() },
+      userId,
+    );
 
     return deletedUser;
   }

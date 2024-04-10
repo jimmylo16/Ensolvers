@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class CreatePostDto {
+export class CreateNoteDto {
   @IsString()
-  @ApiProperty({ example: 'Post title' })
+  @ApiProperty({ example: 'Note title' })
   readonly title: string;
 
   @IsString()
-  @ApiProperty({ example: 'Post content' })
+  @ApiProperty({ example: 'Note content' })
   readonly content: string;
 
   @IsNumber()

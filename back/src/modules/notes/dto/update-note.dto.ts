@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
-import { CreatePostDto } from './create-note.dto';
+import { CreateNoteDto } from './create-note.dto';
 
-export class UpdatePostDto extends PartialType(CreatePostDto) {
+export class UpdateNoteDto extends PartialType(CreateNoteDto) {
   readonly deletedAt?: Date;
 }

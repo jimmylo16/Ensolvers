@@ -36,11 +36,10 @@ export class AuthService {
     if (userExists) throw new BadRequestException('User already exists');
 
     try {
-      const user = new User();
-      user.email = userData.email;
-      user.fullName = userData.fullName;
-      user.password = await this.hashData(password);
-      await user.save();
+      const user = this.userRepository.create({
+        ...userData,
+        password: await this.hashData(password),
+      });
 
       await this.userRepository.save(user);
       delete user.password;

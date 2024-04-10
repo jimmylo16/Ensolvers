@@ -8,15 +8,18 @@ import {
   UseGuards,
   ParseUUIDPipe,
   Query,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { User } from '../entities/user.entity';
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -35,12 +38,17 @@ export class UsersController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req: Request,
   ) {
-    return this.usersService.update(id, updateUserDto);
+    const user = (req as any).user as User;
+    const userId = user['id'];
+    return this.usersService.update(id, updateUserDto, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.remove(id);
+  remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {
+    const user = (req as any).user as User;
+    const userId = user['id'];
+    return this.usersService.remove(id, userId);
   }
 }

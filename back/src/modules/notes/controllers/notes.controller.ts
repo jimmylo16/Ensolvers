@@ -12,8 +12,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { NotesService } from '../services/notes.service';
-import { CreatePostDto } from '../dto/create-note.dto';
-import { UpdatePostDto } from '../dto/update-note.dto';
+import { CreateNoteDto } from '../dto/create-note.dto';
+import { UpdateNoteDto } from '../dto/update-note.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
@@ -27,7 +27,7 @@ export class NotesController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+  create(@Body() createPostDto: CreateNoteDto, @Req() req: Request) {
     const user = (req as any).user as User;
     const userId = user['id'];
     return this.notesService.create({ ...createPostDto, userId: userId });
@@ -48,7 +48,7 @@ export class NotesController {
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updatePostDto: UpdatePostDto,
+    @Body() updatePostDto: UpdateNoteDto,
   ) {
     return this.notesService.update(id, updatePostDto);
   }

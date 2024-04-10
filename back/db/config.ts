@@ -15,7 +15,6 @@ export const dbConfig: TypeOrmModuleOptions = {
   synchronize: false,
   // logging: true,
 };
-
 export const dataSourceOptions = {
   ...dbConfig,
   entities: ['dist/src/modules/**/entities/*.entity{.ts,.js}'],
@@ -26,6 +25,7 @@ export const dataSourceOptions = {
     migrationsDir: __dirname + 'db/migrations',
   },
 } as DataSourceOptions;
+console.log({ dataSourceOptions });
 
 const dataSource = new DataSource(dataSourceOptions);
 

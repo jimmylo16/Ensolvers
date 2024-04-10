@@ -2,8 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export const swaggerConfig = (app: INestApplication) => {
-  app.setGlobalPrefix('api', { exclude: ['/'] });
-
   const config = new DocumentBuilder()
     .setTitle('Ensolvers')
     .setDescription('The Ensolvers docs')
@@ -11,8 +9,6 @@ export const swaggerConfig = (app: INestApplication) => {
     .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, config, {
-    ignoreGlobalPrefix: true,
-  });
+  const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 };

@@ -3,3 +3,7 @@ services:
     build: .\front\
     ports:
       - "8080:8080"
+  back:
+    build: .\back\
+    ports:
+      - "3000:3000"

@@ -1,21 +1,38 @@
 import { UpdateResult } from 'typeorm';
 import { Note } from '../entities/note.entity';
+import { Category } from '../entities/category.entity';
+import { User } from 'src/modules/users/entities/user.entity';
+import { NoteStatus } from '../models/note.model';
 
+export const createdUser: User = {
+  id: '',
+  email: '',
+  createdAt: undefined,
+  fullName: '',
+  updatedAt: undefined,
+  password: '',
+  notes: [],
+  categories: [],
+};
+export const createdCategory: Category = {
+  id: '',
+  description: '',
+  content: '',
+  name: '',
+  user: createdUser,
+  notes: [],
+  createdAt: undefined,
+  updatedAt: undefined,
+};
 export const createdNote: Note = {
   id: '1',
   title: 'test title',
   content: 'test content',
   createdAt: new Date(),
   updatedAt: new Date(),
-  user: {
-    id: '1',
-    email: '',
-    createdAt: new Date(),
-    fullName: 'test user',
-    updatedAt: new Date(),
-    password: 'test password',
-    notes: [],
-  },
+  user: createdUser,
+  status: NoteStatus.ACTIVE,
+  categories: [],
 };
 export const expectedNotes: Note[] = [
   createdNote,
@@ -33,7 +50,10 @@ export const expectedNotes: Note[] = [
       updatedAt: new Date(),
       password: 'test password 2',
       notes: [],
+      categories: [],
     },
+    status: NoteStatus.ACTIVE,
+    categories: [],
   },
 ];
 

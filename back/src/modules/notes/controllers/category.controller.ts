@@ -19,10 +19,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { User } from 'src/modules/users/entities/user.entity';
 
-@Controller('notes')
-@ApiTags('Notes')
-export class NotesController {
-  constructor(private readonly notesService: NotesService) {}
+@Controller('category')
+@ApiTags('Category')
+export class CategoryController {
+  constructor(private readonly categoriesService: NotesService) {}
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
@@ -30,17 +30,17 @@ export class NotesController {
   create(@Body() createDto: CreateNoteDto, @Req() req: Request) {
     const user = (req as any).user as User;
     const userId = user['id'];
-    return this.notesService.create({ ...createDto, userId: userId });
+    return this.categoriesService.create({ ...createDto, userId: userId });
   }
 
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
-    return this.notesService.findAll(paginationDto);
+    return this.categoriesService.findAll(paginationDto);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.notesService.findOne(id);
+    return this.categoriesService.findOne(id);
   }
 
   @ApiBearerAuth()
@@ -50,13 +50,13 @@ export class NotesController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateDto: UpdateNoteDto,
   ) {
-    return this.notesService.update(id, updateDto);
+    return this.categoriesService.update(id, updateDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.notesService.remove(id);
+    return this.categoriesService.remove(id);
   }
 }

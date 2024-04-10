@@ -3,6 +3,7 @@ import { UserModel } from '../models/user.model';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Note } from 'src/modules/notes/entities/note.entity';
+import { Category } from 'src/modules/notes/entities/category.entity';
 
 @Entity('users')
 export class User extends BaseEntity implements UserModel {
@@ -29,4 +30,8 @@ export class User extends BaseEntity implements UserModel {
   @OneToMany(() => Note, (note) => note.user)
   @ApiProperty({ type: () => Note })
   notes: Note[];
+
+  @OneToMany(() => Category, (category) => category.user)
+  @ApiProperty({ type: () => Category })
+  categories: Category[];
 }

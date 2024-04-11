@@ -43,7 +43,6 @@ export class NotesService {
       where: { id: id, deletedAt: null },
       select: ['id', 'content', 'categories', 'title', 'user', 'createdAt'],
       relations: ['user', 'categories'],
-      cache: true,
     });
     if (!note) {
       throw new NotFoundException(`note with id ${id} not found`);

@@ -23,6 +23,18 @@ export const createdCategory: Category = {
   createdAt: undefined,
   updatedAt: undefined,
 };
+export const expectedCategories: Category[] = [
+  createdCategory,
+  {
+    id: '',
+    description: '',
+    name: '',
+    user: createdUser,
+    notes: [],
+    createdAt: undefined,
+    updatedAt: undefined,
+  },
+];
 export const createdNote: Note = {
   id: '1',
   title: 'test title',

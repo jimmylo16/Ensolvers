@@ -25,7 +25,6 @@ export const dataSourceOptions = {
     migrationsDir: __dirname + 'db/migrations',
   },
 } as DataSourceOptions;
-console.log({ dataSourceOptions });
 
 const dataSource = new DataSource(dataSourceOptions);
 

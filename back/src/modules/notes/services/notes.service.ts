@@ -12,49 +12,49 @@ export class NotesService {
     private readonly noteRepository: Repository<Note>,
   ) {}
 
-  async create(createPostDto: CreateNoteDto) {
-    const post = this.noteRepository.create({
-      user: { id: createPostDto.userId },
-      ...createPostDto,
+  async create(createNoteDto: CreateNoteDto) {
+    const note = this.noteRepository.create({
+      user: { id: createNoteDto.userId },
+      ...createNoteDto,
     });
-    await this.noteRepository.save(post);
+    await this.noteRepository.save(note);
 
-    return post;
+    return note;
   }
 
   async findAll(pagination: PaginationDto) {
     const { limit = 10, offset = 0 } = pagination;
-    const posts = await this.noteRepository.find({
+    const notes = await this.noteRepository.find({
       where: { deletedAt: null },
       take: limit,
       skip: offset,
     });
 
-    return posts;
+    return notes;
   }
 
   findOne(id: string) {
-    const post = this.noteRepository.findOne({
+    const note = this.noteRepository.findOne({
       where: { id: id, deletedAt: null },
       select: ['id', 'content', 'title', 'user', 'createdAt'],
     });
-    if (!post) {
-      throw new NotFoundException(`post with id ${id} not found`);
+    if (!note) {
+      throw new NotFoundException(`note with id ${id} not found`);
     }
 
-    return post;
+    return note;
   }
 
-  async update(id: string, updatepostDto: UpdateNoteDto) {
+  async update(id: string, updateNoteDto: UpdateNoteDto) {
     await this.findOne(id);
 
-    const updatedpost = await this.noteRepository.update(id, updatepostDto);
-    return updatedpost;
+    const updatedRecord = await this.noteRepository.update(id, updateNoteDto);
+    return updatedRecord;
   }
 
   async remove(id: string) {
-    const deletedpost = await this.update(id, { deletedAt: new Date() });
+    const deletedRecord = await this.update(id, { deletedAt: new Date() });
 
-    return deletedpost;
+    return deletedRecord;
   }
 }

@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class CreateNoteDto {
+export class CreateCategoryDto {
   @IsString()
-  @ApiProperty({ example: 'Note title' })
-  readonly title: string;
+  @ApiProperty({ example: 'Category title' })
+  readonly name: string;
 
   @IsString()
-  @ApiProperty({ example: 'Note content' })
-  readonly content: string;
+  @ApiProperty({ example: 'Category description' })
+  readonly description: string;
 
   @IsString()
   @IsOptional()

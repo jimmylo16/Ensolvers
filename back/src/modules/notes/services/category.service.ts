@@ -2,59 +2,59 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
-import { CreateNoteDto } from '../dto/create-note.dto';
 import { UpdateNoteDto } from '../dto/update-note.dto';
-import { Note } from '../entities/note.entity';
+import { Category } from '../entities/category.entity';
+import { CreateCategoryDto } from '../dto/create-category.dto';
 @Injectable()
-export class NotesService {
+export class CategoryService {
   constructor(
-    @InjectRepository(Note)
-    private readonly noteRepository: Repository<Note>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  async create(createPostDto: CreateNoteDto) {
-    const post = this.noteRepository.create({
-      user: { id: createPostDto.userId },
-      ...createPostDto,
+  async create(createDto: CreateCategoryDto) {
+    const category = this.categoryRepository.create({
+      user: { id: createDto.userId },
+      ...createDto,
     });
-    await this.noteRepository.save(post);
+    await this.categoryRepository.save(category);
 
-    return post;
+    return category;
   }
 
   async findAll(pagination: PaginationDto) {
     const { limit = 10, offset = 0 } = pagination;
-    const posts = await this.noteRepository.find({
+    const categorys = await this.categoryRepository.find({
       where: { deletedAt: null },
       take: limit,
       skip: offset,
     });
 
-    return posts;
+    return categorys;
   }
 
   findOne(id: string) {
-    const post = this.noteRepository.findOne({
+    const category = this.categoryRepository.findOne({
       where: { id: id, deletedAt: null },
-      select: ['id', 'content', 'title', 'user', 'createdAt'],
+      select: ['id', 'description', 'name', 'user', 'createdAt'],
     });
-    if (!post) {
-      throw new NotFoundException(`post with id ${id} not found`);
+    if (!category) {
+      throw new NotFoundException(`category with id ${id} not found`);
     }
 
-    return post;
+    return category;
   }
 
-  async update(id: string, updatepostDto: UpdateNoteDto) {
+  async update(id: string, updateDto: UpdateNoteDto) {
     await this.findOne(id);
 
-    const updatedpost = await this.noteRepository.update(id, updatepostDto);
-    return updatedpost;
+    const updatedRecord = await this.categoryRepository.update(id, updateDto);
+    return updatedRecord;
   }
 
   async remove(id: string) {
-    const deletedpost = await this.update(id, { deletedAt: new Date() });
+    const deletedRecord = await this.update(id, { deletedAt: new Date() });
 
-    return deletedpost;
+    return deletedRecord;
   }
 }

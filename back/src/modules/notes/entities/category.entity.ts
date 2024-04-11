@@ -17,8 +17,7 @@ export class Category extends BaseEntity implements CategoryModel {
 
   @ApiProperty()
   @Column('text')
-  readonly content: string;
-  name: string;
+  readonly name: string;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.notes)

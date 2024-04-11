@@ -14,10 +14,10 @@ import {
 import { NotesService } from '../services/notes.service';
 import { CreateNoteDto } from '../dto/create-note.dto';
 import { UpdateNoteDto } from '../dto/update-note.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { User } from 'src/modules/users/entities/user.entity';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
 @Controller('notes')
 @ApiTags('Notes')
@@ -25,7 +25,7 @@ export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createDto: CreateNoteDto, @Req() req: Request) {
     const user = (req as any).user as User;
@@ -44,7 +44,7 @@ export class NotesController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -54,7 +54,7 @@ export class NotesController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.notesService.remove(id);

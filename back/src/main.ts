@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { swaggerConfig } from './swagger.config';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './common/interceptors/TransformResponse.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,14 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   swaggerConfig(app);
+  app.useGlobalInterceptors(new TransformInterceptor());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, //Remove objects properties with no decortors
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   await app.listen(process.env.PORT || 3000);
   logger.log(`Application started on port ${process.env.PORT || 3000}`);

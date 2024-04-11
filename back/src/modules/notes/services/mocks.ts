@@ -17,7 +17,6 @@ export const createdUser: User = {
 export const createdCategory: Category = {
   id: '',
   description: '',
-  content: '',
   name: '',
   user: createdUser,
   notes: [],

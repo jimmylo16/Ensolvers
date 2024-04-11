@@ -1,7 +1,13 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { CategoryModel } from '../models/category.model';
 import { Note } from './note.entity';
 
@@ -24,6 +30,6 @@ export class Category extends BaseEntity implements CategoryModel {
   readonly user: User;
 
   @ApiProperty({ type: () => Note })
-  @ManyToOne(() => Note, (note) => note.categories)
+  @ManyToMany(() => Note, (note) => note.categories)
   notes: Note[];
 }

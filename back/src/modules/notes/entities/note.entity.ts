@@ -39,7 +39,7 @@ export class Note extends BaseEntity implements NoteModel {
   readonly user: User;
 
   @ApiProperty({ type: () => Category })
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, (category) => category.notes)
   @JoinTable()
   readonly categories: Category[];
 }

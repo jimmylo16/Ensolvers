@@ -13,9 +13,13 @@ export class NotesService {
   ) {}
 
   async create(createNoteDto: CreateNoteDto) {
+    const uniqueCategories = [...new Set(createNoteDto.category)];
     const note = this.noteRepository.create({
       user: { id: createNoteDto.userId },
       ...createNoteDto,
+      categories: uniqueCategories.map((categoryId) => ({
+        id: categoryId,
+      })),
     });
     await this.noteRepository.save(note);
 
@@ -28,6 +32,7 @@ export class NotesService {
       where: { deletedAt: null },
       take: limit,
       skip: offset,
+      relations: ['user', 'categories'],
     });
 
     return notes;
@@ -36,7 +41,9 @@ export class NotesService {
   findOne(id: string) {
     const note = this.noteRepository.findOne({
       where: { id: id, deletedAt: null },
-      select: ['id', 'content', 'title', 'user', 'createdAt'],
+      select: ['id', 'content', 'categories', 'title', 'user', 'createdAt'],
+      relations: ['user', 'categories'],
+      cache: true,
     });
     if (!note) {
       throw new NotFoundException(`note with id ${id} not found`);

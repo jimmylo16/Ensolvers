@@ -28,6 +28,8 @@ export class CategoryService {
       where: { deletedAt: null },
       take: limit,
       skip: offset,
+      select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],
+      relations: { notes: true },
     });
 
     return categorys;
@@ -36,7 +38,8 @@ export class CategoryService {
   findOne(id: string) {
     const category = this.categoryRepository.findOne({
       where: { id: id, deletedAt: null },
-      select: ['id', 'description', 'name', 'user', 'createdAt'],
+      select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],
+      relations: ['user', 'notes'],
     });
     if (!category) {
       throw new NotFoundException(`category with id ${id} not found`);

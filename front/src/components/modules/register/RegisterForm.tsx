@@ -1,10 +1,4 @@
 import {
-  RegisterFormSchema,
-  registerSchema,
-} from "@/components/schemas/register.schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
   Form,
   FormControl,
   FormField,
@@ -14,44 +8,15 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { axiosCall } from "@/infraestructure/axios";
-import { BackendError } from "@/interfaces/common";
-import { AxiosError } from "axios";
-import { RegisterResponse } from "@/interfaces/backendResponses";
-import { useGlobalState } from "@/hooks/useGlobalContext";
+import { useRegisterForm } from "./useRegisterForm";
 
 export const RegisterForm = () => {
-  const form = useForm<RegisterFormSchema>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      fullName: "",
-      email: "",
-      password: "",
-    },
-  });
-  const { setIsLogged, setView } = useGlobalState();
-
-  const onSubmit = async (values: RegisterFormSchema) => {
-    try {
-      await axiosCall<RegisterResponse>({
-        method: "post",
-        endpoint: "/auth/register",
-        body: values,
-      });
-
-      setIsLogged(true);
-      setView("");
-      window.location.reload();
-    } catch (error: unknown) {
-      const errorData = (error as AxiosError<BackendError>).response?.data;
-      form.setError("root", { type: "value", message: errorData?.message });
-    }
-  };
+  const { form, onSubmit } = useRegisterForm();
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 w-1/2 justify-center "
+        className="flex flex-col gap-2 w-1/4 justify-center "
         data-testid="register-form"
       >
         <FormField
@@ -62,7 +27,7 @@ export const RegisterForm = () => {
               <FormLabel className="pl-2 text-blue-700">Full Name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="fullName"
+                  placeholder="Full Name"
                   className="rounded-2xl"
                   data-testid="fullNameInput"
                   {...field}
@@ -80,7 +45,7 @@ export const RegisterForm = () => {
               <FormLabel className="pl-2 text-blue-700">Email</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="email"
+                  placeholder="Email"
                   className="rounded-2xl"
                   {...field}
                   data-testid="emailInput"
@@ -98,7 +63,7 @@ export const RegisterForm = () => {
               <FormLabel className="pl-2 text-blue-700">Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="password"
+                  placeholder="Password"
                   className="rounded-2xl"
                   type="password"
                   data-testid="passwordInput"

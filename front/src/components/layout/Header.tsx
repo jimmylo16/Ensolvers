@@ -27,7 +27,7 @@ export const Header = ({ setView }: HeaderProps) => {
           className="text-2xl font-bold text-blue-800"
           onClick={() => handleView("")}
         >
-          Home
+          NotesApp
         </span>
       </section>
       <section className="flex items-center gap-4">

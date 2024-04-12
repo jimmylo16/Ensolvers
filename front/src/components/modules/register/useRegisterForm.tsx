@@ -1,44 +1,45 @@
 import {
-  LoginFormSchema,
-  loginSchema,
-} from "@/components/schemas/login.schema";
+  RegisterFormSchema,
+  registerSchema,
+} from "@/components/schemas/register.schema";
 import { useGlobalState } from "@/hooks/useGlobalContext";
 import { axiosCall } from "@/infraestructure/axios";
 import { BackendError } from "@/interfaces/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { LoginResponse } from "./LoginForm.interfaces";
+import { RegisterResponse } from "./Register.interfaces";
 import { toast } from "@/components/ui/use-toast";
 
-export const useLoginForm = () => {
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginSchema),
+export const useRegisterForm = () => {
+  const form = useForm<RegisterFormSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      fullName: "",
       email: "",
       password: "",
     },
   });
   const { setIsLogged, setView } = useGlobalState();
-  const navigate = useNavigate();
 
-  const onSubmit = async (values: LoginFormSchema) => {
+  const onSubmit = async (values: RegisterFormSchema) => {
     try {
-      await axiosCall<LoginResponse>({
+      await axiosCall<RegisterResponse>({
         method: "post",
-        endpoint: "/auth/login",
+        endpoint: "/auth/register",
         body: values,
       });
+
       setIsLogged(true);
       setView("");
-      navigate("/");
       toast({
-        title: "You have Logged in succesfully!",
+        title: "You have registered succesfully!",
       });
-    } catch (error) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error: unknown) {
       const errorData = (error as AxiosError<BackendError>).response?.data;
-      // form.setError("root", { type: "value", message: errorData?.message });
       toast({
         title: "You have an error with the form:",
         description: (

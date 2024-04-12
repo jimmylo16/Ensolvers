@@ -26,10 +26,10 @@ export class NotesService {
     return note;
   }
 
-  async findAll(pagination: PaginationDto) {
+  async findAll(pagination: PaginationDto, userId) {
     const { limit = 10, offset = 0 } = pagination;
     const notes = await this.noteRepository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: null, user: { id: userId } },
       take: limit,
       skip: offset,
       relations: ['user', 'categories'],
@@ -53,8 +53,15 @@ export class NotesService {
 
   async update(id: string, updateNoteDto: UpdateNoteDto) {
     await this.findOne(id);
+    const uniqueCategories = [...new Set(updateNoteDto.category)];
 
-    const updatedRecord = await this.noteRepository.update(id, updateNoteDto);
+    const updatedRecord = await this.noteRepository.preload({
+      id: id,
+      ...updateNoteDto,
+      categories: uniqueCategories.map((categoryId) => ({
+        id: categoryId,
+      })),
+    });
     return updatedRecord;
   }
 

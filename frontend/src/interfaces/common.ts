@@ -7,3 +7,9 @@ export type BackendError = {
   message: string;
   statusCode: number;
 };
+
+export type BackendResponse<T> = {
+  data: T;
+  message: string;
+  statusCode: 200;
+};

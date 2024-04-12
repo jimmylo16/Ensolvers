@@ -1,7 +1,8 @@
 import { AxiosInstance } from "axios";
 import { axiosInstance } from "./axiosInstance";
+import { BackendResponse } from "@/interfaces";
 
-export type AxiosMethods = "get" | "post" | "put" | "delete";
+export type AxiosMethods = "get" | "post" | "put" | "delete" | "patch";
 type IAxiosCall = {
   method: AxiosMethods;
   endpoint: string;
@@ -41,8 +42,12 @@ export const axiosCall = async <T>({
   }
 
   try {
-    const response = await axiosInstance<T>({ method, url, data: body });
-    return response.data;
+    const response = await axiosInstance<BackendResponse<T>>({
+      method,
+      url,
+      data: body,
+    });
+    return response.data.data;
   } catch (error: unknown) {
     return Promise.reject(error);
   }

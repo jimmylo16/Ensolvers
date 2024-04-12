@@ -34,6 +34,7 @@ export class CategoryController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
     const user = (req as any).user as User;
     const userId = user['id'];

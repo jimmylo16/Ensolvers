@@ -34,8 +34,11 @@ export class NotesController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.notesService.findAll(paginationDto);
+  @UseGuards(JwtAuthGuard)
+  findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
+    const user = (req as any).user as User;
+    const userId = user['id'];
+    return this.notesService.findAll(paginationDto, userId);
   }
 
   @Get(':id')

@@ -11,12 +11,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { NoteFormProps } from "./NoteForm.interfaces";
 
-export const NoteForm = () => {
-  const { form, onSubmit } = useNoteForm();
+export const NoteForm = ({ noteId }: NoteFormProps) => {
+  const { form, onSubmit, categories } = useNoteForm({ noteId });
   return (
     <DialogHeader>
-      <DialogTitle className="text-center text-2xl">Add Note</DialogTitle>
+      <DialogTitle className="text-center text-2xl">
+        {noteId ? "Edit Note" : "Add Note"}
+      </DialogTitle>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -55,6 +65,29 @@ export const NoteForm = () => {
                     data-testid="contentInput"
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="categories"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="pl-2 text-blue-700">Content</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={""}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.length > 0 &&
+                      categories.map((category) => (
+                        <SelectItem value={category}>{category}</SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

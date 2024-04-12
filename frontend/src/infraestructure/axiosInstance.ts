@@ -19,14 +19,22 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-axiosInstance.interceptors.response.use((response) => {
-  if (
-    response.config.url === "/auth/login" ||
-    response.config.url === "/auth/register"
-  ) {
-    const token = response.data.data.token;
+axiosInstance.interceptors.response.use(
+  (response) => {
+    if (
+      response.config.url === "/auth/login" ||
+      response.config.url === "/auth/register"
+    ) {
+      const token = response.data.data.token;
 
-    setAccessToken(token);
+      setAccessToken(token);
+    }
+    return response;
+  },
+  function (error) {
+    if (error.response && error.response.status === 401) {
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
   }
-  return response;
-});
+);

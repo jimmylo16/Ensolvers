@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
-import { Dialog, DialogTrigger } from "../ui/dialog";
-import { AddNoteForm } from "./addNoteForm/AddNoteForm";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { NoteForm } from "./noteForm/NoteForm";
 
 export const Notes = () => {
   return (
@@ -9,7 +9,9 @@ export const Notes = () => {
         <DialogTrigger asChild>
           <Button>Add Note</Button>
         </DialogTrigger>
-        <AddNoteForm />
+        <DialogContent>
+          <NoteForm />
+        </DialogContent>
       </Dialog>
     </div>
   );

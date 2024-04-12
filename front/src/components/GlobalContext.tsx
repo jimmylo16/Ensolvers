@@ -8,6 +8,7 @@ import {
 import { Header } from "./layout/Header";
 import { Outlet, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { Toaster } from "./ui/toaster";
 
 export type views = "" | "login" | "register";
 
@@ -51,6 +52,7 @@ export const GlobalProvider = () => {
         className={`flex min-h-screen flex-col items-center  sm:px-24 sm:pt-8 `}
       >
         <Outlet />
+        <Toaster />
       </main>
     </GlobalContext.Provider>
   );

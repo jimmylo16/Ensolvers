@@ -22,10 +22,10 @@ export class CategoryService {
     return category;
   }
 
-  async findAll(pagination: PaginationDto) {
+  async findAll(pagination: PaginationDto, userId: string) {
     const { limit = 10, offset = 0 } = pagination;
     const categorys = await this.categoryRepository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: null, user: { id: userId } },
       take: limit,
       skip: offset,
       select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],

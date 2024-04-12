@@ -48,10 +48,10 @@ describe('Category Service', () => {
 
     jest.spyOn(repository, 'find').mockResolvedValue(expectedCategories);
 
-    const result = await service.findAll(pagination);
+    const result = await service.findAll(pagination, '1');
 
     expect(repository.find).toHaveBeenCalledWith({
-      where: { deletedAt: null },
+      where: { deletedAt: null, user: { id: '1' } },
       take: pagination.limit,
       skip: pagination.offset,
       select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],

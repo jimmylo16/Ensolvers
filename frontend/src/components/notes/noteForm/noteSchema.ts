@@ -5,4 +5,5 @@ export type NoteSchema = z.infer<typeof noteSchema>;
 export const noteSchema = z.object({
   title: z.string().max(30),
   content: z.string(),
+  categories: z.array(z.string()),
 });

@@ -12,10 +12,10 @@ export class NotesService {
     private readonly noteRepository: Repository<Note>,
   ) {}
 
-  async create(createNoteDto: CreateNoteDto) {
+  async create(createNoteDto: CreateNoteDto, userId: string) {
     const uniqueCategories = [...new Set(createNoteDto.category)];
     const note = this.noteRepository.create({
-      user: { id: createNoteDto.userId },
+      user: { id: userId },
       ...createNoteDto,
       categories: uniqueCategories.map((categoryId) => ({
         id: categoryId,

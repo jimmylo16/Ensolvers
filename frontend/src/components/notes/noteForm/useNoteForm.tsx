@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { NoteSchema, noteSchema } from "./noteSchema";
+import { axiosCall } from "@/infraestructure/axios";
 
 export const useNoteForm = () => {
   const form = useForm<NoteSchema>({
@@ -11,12 +12,20 @@ export const useNoteForm = () => {
     defaultValues: {
       content: "",
       title: "",
+      categories: [""],
     },
   });
 
   const onSubmit = async (values: NoteSchema) => {
     try {
-      console.log(values);
+      await axiosCall<unknown>({
+        method: "post",
+        endpoint: "/notes",
+        body: {
+          title: values.title,
+          content: values.content,
+        },
+      });
     } catch (error: unknown) {
       const errorData = (error as AxiosError<BackendError>).response?.data;
       toast({

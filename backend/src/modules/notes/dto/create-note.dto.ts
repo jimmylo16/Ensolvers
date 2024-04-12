@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsArray } from 'class-validator';
+import { IsString, IsArray, IsOptional } from 'class-validator';
 
 export class CreateNoteDto {
   @IsString()
@@ -10,11 +10,9 @@ export class CreateNoteDto {
   @ApiProperty({ example: 'Note content' })
   readonly content: string;
 
-  @IsString()
-  @ApiProperty()
-  readonly userId: string;
-
   @IsArray()
   @IsString({ each: true })
+  @ApiProperty({ example: ['Note category'] })
+  @IsOptional()
   readonly category: string[];
 }

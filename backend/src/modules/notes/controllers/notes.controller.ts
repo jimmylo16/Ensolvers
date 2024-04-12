@@ -30,7 +30,7 @@ export class NotesController {
   create(@Body() createDto: CreateNoteDto, @Req() req: Request) {
     const user = (req as any).user as User;
     const userId = user['id'];
-    return this.notesService.create({ ...createDto, userId: userId });
+    return this.notesService.create({ ...createDto }, userId);
   }
 
   @Get()

@@ -34,8 +34,10 @@ export class CategoryController {
   }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.categoriesService.findAll(paginationDto);
+  findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
+    const user = (req as any).user as User;
+    const userId = user['id'];
+    return this.categoriesService.findAll(paginationDto, userId);
   }
 
   @Get(':id')

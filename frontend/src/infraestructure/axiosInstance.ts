@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use((response) => {
     response.config.url === "/auth/login" ||
     response.config.url === "/auth/register"
   ) {
-    const token = response.data.token;
+    const token = response.data.data.token;
 
     setAccessToken(token);
   }

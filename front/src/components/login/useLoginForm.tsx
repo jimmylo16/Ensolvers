@@ -1,7 +1,4 @@
-import {
-  LoginFormSchema,
-  loginSchema,
-} from "@/components/schemas/login.schema";
+import { LoginFormSchema, loginSchema } from "@/components/login/login.schema";
 import { useGlobalState } from "@/hooks/useGlobalContext";
 import { axiosCall } from "@/infraestructure/axios";
 import { BackendError } from "@/interfaces/common";

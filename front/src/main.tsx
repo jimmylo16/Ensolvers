@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { App } from "./routes/App";
+import { NotesPage } from "./routes/NotesPage.tsx";
 import { Login } from "./routes/Login.tsx";
 import { Register } from "./routes/Register.tsx";
 import { GlobalProvider } from "./components/GlobalContext.tsx";
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />,
+        element: <NotesPage />,
       },
       {
         path: "/login",

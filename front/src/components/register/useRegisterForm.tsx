@@ -1,7 +1,7 @@
 import {
   RegisterFormSchema,
   registerSchema,
-} from "@/components/schemas/register.schema";
+} from "@/components/register/register.schema";
 import { useGlobalState } from "@/hooks/useGlobalContext";
 import { axiosCall } from "@/infraestructure/axios";
 import { BackendError } from "@/interfaces/common";

@@ -1,14 +1,21 @@
-version: '3'
-
+version: '3.5'
 services:
-  db:
-    image: postgres:14-alpine
-    restart: always
-    ports:
-      - '5400:5432'
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    container_name: ensolvers-db
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: postgres
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: ${PORT}
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./src:/app/src

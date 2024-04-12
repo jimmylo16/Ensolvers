@@ -1,6 +1,6 @@
 services:
   front:
-    build: .\front\
+    build: .\frontend\
     ports:
       - "8080:8080"
   db:
@@ -15,7 +15,7 @@ services:
     ports:
       - "5432:5432"
   back:
-    build: .\back\
+    build: .\backend\
     depends_on:
       - db
     environment:

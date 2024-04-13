@@ -19,5 +19,12 @@ export const useNotes = () => {
     setNoteId(noteId);
   };
 
-  return { notes, onClick, open, setOpen, noteId };
+  const onDelete = (noteId: string) => {
+    axiosCall<Notes[]>({
+      method: "delete",
+      endpoint: `/notes/${noteId}`,
+    });
+  };
+
+  return { notes, onClick, open, setOpen, noteId, onDelete };
 };

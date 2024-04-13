@@ -36,6 +36,7 @@ export const NoteForm = ({ noteId }: NoteFormProps) => {
           <FormField
             control={form.control}
             name="title"
+            defaultValue={""}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="pl-2 text-blue-700">Title</FormLabel>
@@ -54,6 +55,7 @@ export const NoteForm = ({ noteId }: NoteFormProps) => {
           <FormField
             control={form.control}
             name="content"
+            defaultValue={""}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="pl-2 text-blue-700">Content</FormLabel>
@@ -72,6 +74,7 @@ export const NoteForm = ({ noteId }: NoteFormProps) => {
           <FormField
             control={form.control}
             name="categories"
+            defaultValue={[""]}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="pl-2 text-blue-700">Content</FormLabel>

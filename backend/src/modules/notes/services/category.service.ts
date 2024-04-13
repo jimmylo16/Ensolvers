@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { UpdateNoteDto } from '../dto/update-note.dto';
 import { Category } from '../entities/category.entity';
 import { CreateCategoryDto } from '../dto/create-category.dto';
@@ -25,7 +25,7 @@ export class CategoryService {
   async findAll(pagination: PaginationDto, userId: string) {
     const { limit = 10, offset = 0 } = pagination;
     const categorys = await this.categoryRepository.find({
-      where: { deletedAt: null, user: { id: userId } },
+      where: { deletedAt: IsNull(), user: { id: userId } },
       take: limit,
       skip: offset,
       select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],
@@ -37,7 +37,7 @@ export class CategoryService {
 
   findOne(id: string) {
     const category = this.categoryRepository.findOne({
-      where: { id: id, deletedAt: null },
+      where: { id: id, deletedAt: IsNull() },
       select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],
       relations: ['user', 'notes'],
     });

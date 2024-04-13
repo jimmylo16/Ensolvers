@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { CreateNoteDto } from '../dto/create-note.dto';
 import { UpdateNoteDto } from '../dto/update-note.dto';
 import { Note } from '../entities/note.entity';
@@ -26,21 +26,22 @@ export class NotesService {
     return note;
   }
 
-  async findAll(pagination: PaginationDto, userId) {
+  async findAll(pagination: PaginationDto, userId: string) {
     const { limit = 10, offset = 0 } = pagination;
     const notes = await this.noteRepository.find({
-      where: { deletedAt: null, user: { id: userId } },
+      where: { deletedAt: IsNull(), user: { id: userId } },
       take: limit,
       skip: offset,
       relations: ['user', 'categories'],
     });
+    console.log({ notes });
 
     return notes;
   }
 
   findOne(id: string) {
     const note = this.noteRepository.findOne({
-      where: { id: id, deletedAt: null },
+      where: { id: id, deletedAt: IsNull() },
       select: ['id', 'content', 'categories', 'title', 'user', 'createdAt'],
       relations: ['user', 'categories'],
     });
@@ -62,10 +63,12 @@ export class NotesService {
         id: categoryId,
       })),
     });
+    await this.noteRepository.save(updatedRecord);
     return updatedRecord;
   }
 
   async remove(id: string) {
+    console.log(new Date());
     const deletedRecord = await this.update(id, { deletedAt: new Date() });
 
     return deletedRecord;

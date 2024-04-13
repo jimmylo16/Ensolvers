@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { createdCategory, expectedCategories, updatedResult } from './mocks';
 import { CategoryService } from './category.service';
 import { Category } from '../entities/category.entity';
@@ -25,7 +25,7 @@ describe('Category Service', () => {
     repository = module.get<Repository<Category>>(getRepositoryToken(Category));
   });
 
-  it('should create a note', async () => {
+  it('should create a category', async () => {
     const createDto: CreateCategoryDto = {
       name: 'Test category',
       description: '',
@@ -43,7 +43,7 @@ describe('Category Service', () => {
     expect(result).toEqual(createdCategory);
   });
 
-  it('should return all notes', async () => {
+  it('should return all categorys', async () => {
     const pagination = { limit: 10, offset: 0 };
 
     jest.spyOn(repository, 'find').mockResolvedValue(expectedCategories);
@@ -51,48 +51,48 @@ describe('Category Service', () => {
     const result = await service.findAll(pagination, '1');
 
     expect(repository.find).toHaveBeenCalledWith({
-      where: { deletedAt: null, user: { id: '1' } },
+      where: { deletedAt: IsNull(), user: { id: '1' } },
       take: pagination.limit,
       skip: pagination.offset,
-      select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],
-      relations: { notes: true },
+      select: ['id', 'description', 'categorys', 'name', 'user', 'createdAt'],
+      relations: { categorys: true },
     });
     expect(result).toEqual(expectedCategories);
   });
 
-  it('should return a note by id', async () => {
-    const noteId = '1';
+  it('should return a category by id', async () => {
+    const categoryId = '1';
 
     jest.spyOn(repository, 'findOne').mockResolvedValue(createdCategory);
 
-    const result = await service.findOne(noteId);
+    const result = await service.findOne(categoryId);
 
     expect(repository.findOne).toHaveBeenCalledWith({
-      where: { id: noteId, deletedAt: null },
-      select: ['id', 'description', 'notes', 'name', 'user', 'createdAt'],
-      relations: ['user', 'notes'],
+      where: { id: categoryId, deletedAt: IsNull() },
+      select: ['id', 'description', 'categorys', 'name', 'user', 'createdAt'],
+      relations: ['user', 'categorys'],
     });
     expect(result).toEqual(createdCategory);
   });
 
-  it('should update a note', async () => {
-    const noteId = '1';
+  it('should update a category', async () => {
+    const categoryId = '1';
     const updateDto = { title: 'updated title', content: 'updated content' };
 
     jest.spyOn(service, 'findOne').mockResolvedValue(createdCategory);
     jest.spyOn(repository, 'update').mockResolvedValue(updatedResult);
 
-    const result = await service.update(noteId, updateDto);
+    const result = await service.update(categoryId, updateDto);
 
     expect(result).toEqual(updatedResult);
   });
 
-  it('should delete a note', async () => {
-    const noteId = '1';
+  it('should delete a category', async () => {
+    const categoryId = '1';
 
     jest.spyOn(service, 'update').mockResolvedValue(updatedResult);
 
-    const result = await service.remove(noteId);
+    const result = await service.remove(categoryId);
 
     expect(result).toEqual(updatedResult);
   });

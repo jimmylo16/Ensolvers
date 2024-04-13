@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { createdNote, expectedNotes, updatedResult } from './mocks';
+import { IsNull, Repository } from 'typeorm';
+import { createdNote, expectedNotes } from './mocks';
 import { NotesService } from './notes.service';
 import { Note } from '../entities/note.entity';
 import { CreateNoteDto } from '../dto/create-note.dto';
@@ -29,14 +29,13 @@ describe('Notes Service', () => {
     const createDto: CreateNoteDto = {
       title: 'test title',
       content: 'test content',
-      userId: '1',
       category: ['test'],
     };
 
     jest.spyOn(repository, 'create').mockImplementation(() => createdNote);
     jest.spyOn(repository, 'save').mockImplementation(async () => createdNote);
 
-    const result = await service.create(createDto);
+    const result = await service.create(createDto, '1');
 
     expect(repository.save).toHaveBeenCalledWith(createdNote);
     expect(result).toEqual(createdNote);
@@ -47,10 +46,10 @@ describe('Notes Service', () => {
 
     jest.spyOn(repository, 'find').mockResolvedValue(expectedNotes);
 
-    const result = await service.findAll(pagination);
+    const result = await service.findAll(pagination, '1');
 
     expect(repository.find).toHaveBeenCalledWith({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull(), user: { id: '1' } },
       take: pagination.limit,
       skip: pagination.offset,
       relations: ['user', 'categories'],
@@ -66,7 +65,7 @@ describe('Notes Service', () => {
     const result = await service.findOne(noteId);
 
     expect(repository.findOne).toHaveBeenCalledWith({
-      where: { id: noteId, deletedAt: null },
+      where: { id: noteId, deletedAt: IsNull() },
       select: ['id', 'content', 'categories', 'title', 'user', 'createdAt'],
       relations: ['user', 'categories'],
     });
@@ -77,21 +76,23 @@ describe('Notes Service', () => {
     const noteId = '1';
     const updateDto = { title: 'updated title', content: 'updated content' };
 
+    const updateObj = { ...createdNote, ...updateDto };
     jest.spyOn(service, 'findOne').mockResolvedValue(createdNote);
-    jest.spyOn(repository, 'update').mockResolvedValue(updatedResult);
+    jest.spyOn(repository, 'preload').mockResolvedValue(updateObj);
+    jest.spyOn(repository, 'save').mockResolvedValue(updateObj);
 
     const result = await service.update(noteId, updateDto);
 
-    expect(result).toEqual(updatedResult);
+    expect(result).toEqual(updateObj);
   });
 
   it('should delete a note', async () => {
     const noteId = '1';
 
-    jest.spyOn(service, 'update').mockResolvedValue(updatedResult);
+    const deleteResult = { ...createdNote, deleteAt: new Date() };
+    jest.spyOn(service, 'update').mockResolvedValue(deleteResult);
 
     const result = await service.remove(noteId);
-
-    expect(result).toEqual(updatedResult);
+    expect(result).toEqual(deleteResult);
   });
 });

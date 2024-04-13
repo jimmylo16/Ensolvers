@@ -1,7 +1,7 @@
 import TrashSvg from "@/components/icons/Trash.svg";
 import { NoteForm } from "../noteForm/NoteForm";
 import { useNotes } from "../useNotes";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export const NoteList = () => {
   const { notes, open, setOpen, onClick, noteId, onDelete } = useNotes();

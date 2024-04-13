@@ -34,7 +34,6 @@ export class NotesService {
       skip: offset,
       relations: ['user', 'categories'],
     });
-    console.log({ notes });
 
     return notes;
   }
@@ -68,9 +67,8 @@ export class NotesService {
   }
 
   async remove(id: string) {
-    console.log(new Date());
     const deletedRecord = await this.update(id, { deletedAt: new Date() });
-
+    console.log(77, { test: deletedRecord.deletedAt });
     return deletedRecord;
   }
 }

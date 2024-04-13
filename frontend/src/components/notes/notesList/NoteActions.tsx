@@ -47,6 +47,7 @@ export const NoteActions = ({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
+              <SelectItem value={"-"}>Select a Category to filte</SelectItem>
               {categories.map((category, index) => (
                 <SelectItem value={category.value} key={category.value + index}>
                   {category.label}

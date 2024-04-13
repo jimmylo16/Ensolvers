@@ -25,7 +25,7 @@ export const useNotes = () => {
     })
       .then((notes) => {
         setNotes(notes);
-        setRenderedNotes(notes);
+        setRenderedNotes(notes.filter((note) => note.status === "active"));
       })
       .catch((err: AxiosError) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,17 +77,39 @@ export const useNotes = () => {
         endpoint: "/notes",
       }).then((notes) => {
         setNotes(notes);
-        setRenderedNotes(notes);
+        setRenderedNotes(notes.filter((note) => note.status === noteStatus));
+      });
+    });
+  };
+  const onActivate = (noteId: string) => {
+    axiosCall<Notes[]>({
+      method: "patch",
+      endpoint: `/notes/${noteId}`,
+      body: { status: "active" },
+    }).then(() => {
+      axiosCall<Notes[]>({
+        method: "get",
+        endpoint: "/notes",
+      }).then((notes) => {
+        setNotes(notes);
+        setRenderedNotes(notes.filter((note) => note.status === noteStatus));
       });
     });
   };
 
   const filterNote = (categoryId: string) => {
-    setRenderedNotes(
-      notes
-        .filter((note) => note.categories.find((cat) => cat.id === categoryId))
-        .filter((note) => note.status === noteStatus)
-    );
+    if (categoryId === "-") {
+      setRenderedNotes(notes.filter((note) => note.status === noteStatus));
+    } else {
+      setRenderedNotes(
+        notes
+          .filter((note) => note.status === noteStatus)
+          .filter((note) => {
+            console.log(note.categories.find((cat) => cat?.id === categoryId));
+            return note.categories.find((cat) => cat?.id === categoryId);
+          })
+      );
+    }
   };
 
   const togleActiveNotes = (status: NoteStatus) => {
@@ -100,6 +122,7 @@ export const useNotes = () => {
     noteStatus,
     renderedNotes,
     onClick,
+    onActivate,
     open,
     setOpen,
     noteId,

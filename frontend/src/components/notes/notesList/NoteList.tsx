@@ -4,6 +4,7 @@ import { useNotes } from "../useNotes";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import ArchivedSvg from "@/components/icons/Archived.svg";
 import { NoteActions } from "./NoteActions";
+import ActivateSvg from "@/components/icons/Activate.svg";
 
 export const NoteList = () => {
   const {
@@ -18,8 +19,8 @@ export const NoteList = () => {
     togleActiveNotes,
     categories,
     filterNote,
+    onActivate,
   } = useNotes();
-
   return (
     <>
       <NoteActions
@@ -43,10 +44,18 @@ export const NoteList = () => {
                 {note.title}
               </span>
               <div className="flex gap-2 items-center justify-center">
-                <ArchivedSvg
-                  className="cursor-pointer"
-                  onClick={() => onArchive(note.id)}
-                />
+                {note.status === "active" ? (
+                  <ArchivedSvg
+                    className="cursor-pointer"
+                    onClick={() => onArchive(note.id)}
+                  />
+                ) : (
+                  <ActivateSvg
+                    className="cursor-pointer"
+                    onClick={() => onActivate(note.id)}
+                  />
+                )}
+
                 <TrashSvg
                   onClick={() => onDelete(note.id)}
                   className="z-10 cursor-pointer"

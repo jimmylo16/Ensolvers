@@ -1,5 +1,5 @@
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useNoteForm } from "./useNoteForm";
+import { useCategoryForm } from "./useCategoryForm";
 import { Button } from "@/components/ui/button";
 import {
   FormField,
@@ -11,25 +11,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { NoteFormProps } from "./NoteForm.interfaces";
 
-export const NoteForm = ({ noteId, setOpenAddNote }: NoteFormProps) => {
-  const { form, onSubmit, categories } = useNoteForm({
-    noteId,
-    setOpenAddNote,
-  });
+export const CategoryForm = () => {
+  const { form, onSubmit } = useCategoryForm();
   return (
     <DialogHeader>
-      <DialogTitle className="text-center text-2xl">
-        {noteId ? "Edit Note" : "Add Note"}
-      </DialogTitle>
+      <DialogTitle className="text-center text-2xl">Add Category</DialogTitle>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -38,14 +25,14 @@ export const NoteForm = ({ noteId, setOpenAddNote }: NoteFormProps) => {
         >
           <FormField
             control={form.control}
-            name="title"
+            name="name"
             defaultValue={""}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="pl-2 text-blue-700">Title</FormLabel>
+                <FormLabel className="pl-2 text-blue-700">Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Title Note"
+                    placeholder="Category Name"
                     className="rounded-2xl"
                     data-testid="titleInput"
                     {...field}
@@ -57,48 +44,21 @@ export const NoteForm = ({ noteId, setOpenAddNote }: NoteFormProps) => {
           />
           <FormField
             control={form.control}
-            name="content"
+            name="description"
             defaultValue={""}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="pl-2 text-blue-700">Content</FormLabel>
+                <FormLabel className="pl-2 text-blue-700">
+                  Description
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Add note description"
+                    placeholder="Add category description"
                     className="resize-none"
                     {...field}
                     data-testid="contentInput"
                   />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="categories"
-            defaultValue={""}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="pl-2 text-blue-700">Content</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.length > 0 &&
-                      categories.map((category, index) => (
-                        <SelectItem
-                          value={category.value}
-                          key={category.value + index}
-                        >
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
                 <FormMessage />
               </FormItem>
             )}

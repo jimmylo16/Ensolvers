@@ -1,6 +1,7 @@
 import { TsetView, views } from "../GlobalContext";
 import { useGlobalState } from "@/hooks/useGlobalContext";
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
@@ -19,6 +20,11 @@ export const Header = ({ setView }: HeaderProps) => {
     navigate("/");
     window.location.reload();
   };
+  useEffect(() => {
+    if (!Cookies.get("token")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <nav className="flex-no-wrap top-0 flex w-full items-center justify-between  bg-slate-50  py-4 shadow-md shadow-black/5 sticky px-12">

@@ -1,3 +1,5 @@
+import { Category } from "./categories";
+
 export interface Notes {
   createdAt: string;
   updatedAt: string;
@@ -7,7 +9,7 @@ export interface Notes {
   content: string;
   status: string;
   user: User;
-  categories: any[];
+  categories: Category[];
 }
 
 export interface User {

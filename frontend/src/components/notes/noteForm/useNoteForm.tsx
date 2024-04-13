@@ -8,30 +8,25 @@ import { axiosCall } from "@/infraestructure/axios";
 import { useEffect, useState } from "react";
 import { NoteFormProps } from "./NoteForm.interfaces";
 import { Notes } from "@/interfaces/notes";
+import { Category } from "@/interfaces/categories";
 
-export const useNoteForm = ({ noteId }: NoteFormProps) => {
+export const useNoteForm = ({ noteId, setOpenAddNote }: NoteFormProps) => {
   const form = useForm<NoteSchema>({
     resolver: zodResolver(noteSchema),
-    // defaultValues: async () => {
-    //   return {
-    //     title: "",
-    //     content: "",
-    //     categories: await axiosCall<string[]>({
-    //       method: "get",
-    //       endpoint: "/category",
-    //     }),
-    //   };
-    // },
   });
 
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   useEffect(() => {
-    axiosCall<string[]>({
+    axiosCall<Category[]>({
       method: "get",
       endpoint: "/category",
     }).then((res) => {
-      setCategories(res);
+      setCategories(
+        res.map((category) => ({ value: category.id, label: category.name }))
+      );
     });
   }, []);
 
@@ -44,7 +39,7 @@ export const useNoteForm = ({ noteId }: NoteFormProps) => {
         form.reset({
           title: res.title,
           content: res.content,
-          categories: res.categories,
+          categories: res.categories[0].id,
         });
       });
     }
@@ -54,7 +49,7 @@ export const useNoteForm = ({ noteId }: NoteFormProps) => {
     const body = {
       title: values.title,
       content: values.content,
-      category: values.categories,
+      category: [values.categories],
     };
     try {
       if (noteId) {
@@ -70,6 +65,8 @@ export const useNoteForm = ({ noteId }: NoteFormProps) => {
           body: body,
         });
       }
+      setOpenAddNote(false);
+      window.location.reload();
     } catch (error: unknown) {
       const errorData = (error as AxiosError<BackendError>).response?.data;
       toast({

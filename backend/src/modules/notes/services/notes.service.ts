@@ -17,9 +17,11 @@ export class NotesService {
     const note = this.noteRepository.create({
       user: { id: userId },
       ...createNoteDto,
-      categories: uniqueCategories.map((categoryId) => ({
-        id: categoryId,
-      })),
+      categories: uniqueCategories
+        .filter((category) => category != '')
+        .map((categoryId) => ({
+          id: categoryId,
+        })),
     });
     await this.noteRepository.save(note);
 
@@ -68,7 +70,6 @@ export class NotesService {
 
   async remove(id: string) {
     const deletedRecord = await this.update(id, { deletedAt: new Date() });
-    console.log(77, { test: deletedRecord.deletedAt });
     return deletedRecord;
   }
 }

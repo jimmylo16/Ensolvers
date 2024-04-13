@@ -35,7 +35,7 @@ export const NoteList = () => {
       ))}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <NoteForm noteId={noteId} />
+          <NoteForm noteId={noteId} setOpenAddNote={setOpen} />
         </DialogContent>
       </Dialog>
     </section>

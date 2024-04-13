@@ -15,7 +15,10 @@ export const Notes = () => {
       <div className="flex flex-row justify-between">
         <Dialog open={openAddNote} onOpenChange={setOpenAddNote}>
           <DialogTrigger asChild>
-            <Button className="w-fit" onClick={() => setOpenAddNote(true)}>
+            <Button
+              className="w-fit text-lg"
+              onClick={() => setOpenAddNote(true)}
+            >
               Add Note
             </Button>
           </DialogTrigger>
@@ -25,7 +28,7 @@ export const Notes = () => {
         </Dialog>
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="w-fit">Add Category</Button>
+            <Button className="w-fit text-lg">Add Category</Button>
           </DialogTrigger>
           <DialogContent>
             <CategoryForm />
